@@ -94,7 +94,7 @@ export class UsersService {
       if (!isPasswordMatch) {
         throw new Error('Invalid email or password');
       }
-      const token = await generateAuthToken(userExists._id);
+      const token = await generateAuthToken(userExists._id.toString());
 
       return {
         success: true,

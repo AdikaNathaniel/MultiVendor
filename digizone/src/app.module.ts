@@ -11,10 +11,10 @@ import { OrdersModule } from './orders/orders.module';
 @Module({
   imports: [
     MongooseModule.forRoot(config.get('mongoDbUrl'), {
-      useNewUrlParser: true,
-      keepAlive: true,
-      useUnifiedTopology: true,
+      // Modern Mongoose doesn't need useNewUrlParser and useUnifiedTopology
       w: 1,
+      retryWrites: true,
+      maxPoolSize: 10,
     }),
     UsersModule,
     ProductsModule,
@@ -30,4 +30,3 @@ import { OrdersModule } from './orders/orders.module';
   ],
 })
 export class AppModule {}
-

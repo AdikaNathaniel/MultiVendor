@@ -1,7 +1,6 @@
 import { BadRequestException, Inject, Injectable } from '@nestjs/common';
-import { InjectStripe } from 'nestjs-stripe';
 import { OrdersRepository } from 'src/shared/repositories/order.repository';
-import { ProductRepository } from 'src/shared/repositories/product.repository';
+import { ProductRepository } from 'src/shared/repositories/product.respository';
 import { UserRepository } from 'src/shared/repositories/user.repository';
 import Stripe from 'stripe';
 import { checkoutDtoArr } from './dto/checkout.dto';
@@ -13,7 +12,7 @@ import { sendEmail } from 'src/shared/utility/mail-handler';
 @Injectable()
 export class OrdersService {
   constructor(
-    @InjectStripe() private readonly stripeClient: Stripe,
+    @Inject('STRIPE_CLIENT') private readonly stripeClient: Stripe,
     @Inject(OrdersRepository) private readonly orderDB: OrdersRepository,
     @Inject(ProductRepository) private readonly productDB: ProductRepository,
     @Inject(UserRepository) private readonly userDB: UserRepository,
@@ -26,7 +25,7 @@ export class OrdersService {
       });
       if (orderExists) return orderExists;
       const result = await this.orderDB.create(createOrderDto);
-        return result;
+      return result;
     } catch (error) {
       throw error;
     }
@@ -192,6 +191,7 @@ export class OrdersService {
       },
     );
   }
+
   async getLicense(orderId: string, item: Record<string, any>) {
     try {
       const product = await this.productDB.findOne({

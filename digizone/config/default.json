@@ -7,9 +7,9 @@
     "appPrefix": "/api/v1",
     "fileStoragePath": "../uploads/",
     "emailService": {
-      "testDomain": "sandboxab7113c6468b4923a97bfd4f151f8776.mailgun.org",
-      "privateApiKey": "7d1e83a6248b73895f2e0262ad1c3a60-835621cf-e8afd81f",
-      "publicApiKey": "pubkey-88ba02ebc871125a5438ad1865535538",   
+      "testDomain": "sandbox44a635ffb0ac46cb82f149618060aec6.mailgun.org",
+      "privateApiKey": "a3e45e08c5f3a17554c01bfed2739a57-2e68d0fb-d41c2751",
+      "publicApiKey": "pubkey-9a1650e7bef00d512ce8e2e4f3e27173",   
       "emailTemplates": {
         "forgotPassword": "forgot-password-template",
         "verifyEmail": "verify-email-template",

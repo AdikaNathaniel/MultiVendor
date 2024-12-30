@@ -1,10 +1,9 @@
 import { BadRequestException, Inject, Injectable } from '@nestjs/common';
-import InjectStripe from 'stripe';
-import { ProductRepository } from 'src/shared/repositories/product.repository';
+import Stripe from 'stripe';
+import { ProductRepository } from 'src/shared/repositories/product.respository';
 import { Products } from 'src/shared/schema/products';
-import {Stripe} from 'nestjs-stripe';
 import { CreateProductDto } from './dto/create-product.dto';
-// import { GetProductQueryDto } from './dto/get-product-query-dto';
+import { GetProductQueryDto } from './dto/get-product-query-dto';
 import qs2m from 'qs-to-mongo';
 import cloudinary from 'cloudinary';
 import config from 'config';
@@ -17,7 +16,7 @@ export class ProductsService {
   constructor(
     @Inject(ProductRepository) private readonly productDB: ProductRepository,
     @Inject(OrdersRepository) private readonly orderDB: OrdersRepository,
-    @InjectStripe() private readonly stripeClient: Stripe,
+    @Inject('STRIPE_CLIENT') private readonly stripeClient: Stripe,
   ) {
     cloudinary.v2.config({
       cloud_name: config.get('cloudinary.cloud_name'),
@@ -25,6 +24,7 @@ export class ProductsService {
       api_secret: config.get('cloudinary.api_secret'),
     });
   }
+
   async createProduct(createProductDto: CreateProductDto): Promise<{
     message: string;
     result: Products;
@@ -200,7 +200,7 @@ export class ProductsService {
       const resOfCloudinary = await cloudinary.v2.uploader.upload(file.path, {
         folder: config.get('cloudinary.folderPath'),
         public_id: `${config.get('cloudinary.publicId_prefix')}${Date.now()}`,
-        transformation: [   
+        transformation: [
           {
             width: config.get('cloudinary.bigSize').toString().split('X')[0],
             height: config.get('cloudinary.bigSize').toString().split('X')[1],

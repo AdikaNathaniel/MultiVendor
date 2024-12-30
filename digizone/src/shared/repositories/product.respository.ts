@@ -3,8 +3,15 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { CreateProductDto } from 'src/products/dto/create-product.dto';
 import { Products } from '../schema/products';
-import { ParsedOptions } from 'qs-to-mongo/lib/query/options-to-mongo';
 import { License } from '../schema/license';
+
+// Define ParsedOptions interface to avoid import issues
+interface ParsedOptions {
+  sort?: Record<string, 1 | -1>;
+  skip?: number;
+  limit?: number;
+  fields?: string[];
+}
 
 @Injectable()
 export class ProductRepository {
@@ -131,8 +138,9 @@ export class ProductRepository {
   }
 
   async deleteAllLicences(productId: string, skuId: string) {
-    if (productId)
+    if (productId) {
       return await this.licenseModel.deleteMany({ product: productId });
+    }
     return await this.licenseModel.deleteMany({ productSku: skuId });
   }
 }
