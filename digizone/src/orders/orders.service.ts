@@ -78,7 +78,7 @@ export class OrdersService {
         });
         if (itemsAreInStock.length <= item.quantity) {
           lineItems.push({
-            price: item.skuPriceId,
+             price: item.skuPriceId,
             quantity: item.quantity,
             adjustable_quantity: {
               enabled: true,

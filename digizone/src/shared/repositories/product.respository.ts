@@ -55,7 +55,7 @@ export class ProductRepository {
   }
 
   async find(query: Record<string, any>, options: ParsedOptions) {
-    options.sort = options.sort || { _id: 1 };
+    options.sort = options.sort || { stripeProductId: 1 };
     options.limit = options.limit || 12;
     options.skip = options.skip || 0;
 
@@ -128,10 +128,10 @@ export class ProductRepository {
 
   async deleteSku(id: string, skuId: string) {
     return await this.productModel.updateOne(
-      { _id: id },
+      { stripeProductId: id },
       {
         $pull: {
-          skuDetails: { _id: skuId },
+          skuDetails: { stripeProductId: skuId },
         },
       },
     );

@@ -17,19 +17,20 @@
       }
     },
     "cloudinary": {
-      "cloud_name": "df2uufrnc",
-      "api_key": "315812872785858",
-      "api_secret": "5QEv4lqlmwFKvjVoGCfQzWCnbKg",
+      "cloud_name": "dal1zfqdj",
+      "api_key": "944838819721285",
+      "api_secret": "2ekbd6Sl9dwq8KMfzsYvmMzR9RM",
       "folderPath": "digizone/products/",
       "publicId_prefix": "digi_prods_",
       "bigSize": "400X400"
     },
     "stripe": {
-      "publishable_key": "pk_test_51GzkT8C75ex8AkqxBjjmzLHcc1aBuKKkdxk0IQDhXfx58yaCtcOHm1rRm1zZbfYtOvesyS459XnBwcir8o6hVeQt00s2xbwlpk",
-      "secret_key": "sk_test_51GzkT8C75ex8AkqxNlnmuLprbZGDFTvbL2jGMVkyH70ZHXWRXfTeGCPeRlZjhhrABUm8s1GAGT43T5skBUv4hqBv00GrCiFOpg",
+      "publishable_key": "pk_test_51QbdrkJPRcu1eGRzI1htI9IwY3RGYWMAY0krRzAtV9hsaW7VdckCGpR6hEJapZ4QlzkIOizirfF9UVJ4TfAkWKmF00In09Rtlm",
+      "secret_key": "sk_test_51QbdrkJPRcu1eGRzMt9kz0x8amSP9BtSjJuK1qw545EVYBsWNm5UuAN8gxnm2GvJIxobSHQGZFY4caDKqPjdtyrb00LHVIAxbp",
       "successUrl": "http://localhost:3000/order-success",
       "cancelUrl": "http://localhost:3000/order-cancel",
-      "webhookSecret": "whsec_65091664c52548dae5e241f06b7b885826abc096430fc3fcfea6fe567623d859"
+      "webhookSecret": "whsec_62088695f14026bf21d0c8dfd2f43a3ae88f25c8bf5f0b4b36f8c848145e44d1"
     }
+    
   }
   

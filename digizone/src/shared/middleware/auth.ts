@@ -29,6 +29,11 @@ import {
         user.password = undefined;
         req.user = user;
         next();
+
+
+        if(req.originalUrl.includes('/orders/webhook')){
+             return next();
+        }
       } catch (error) {
         throw new UnauthorizedException(error.message);
       }
