@@ -34,27 +34,27 @@ export class OrdersService {
 
   async findAll(status: string, user: Record<string, any>) {
     try {
-      const userDetails = await this.userDB.findOne({
-        _id: user._id.toString(),
-      });
+      const userId = user?._id?.toString() || new ObjectId(); // Default ObjectId if undefined
+      const userDetails = await this.userDB.findOne({ _id: userId });
+      
       const query = {} as Record<string, any>;
-      if (userDetails.type === userTypes.CUSTOMER) {
-        query.userId = user._id.toString();
+      if (userDetails?.type === userTypes.CUSTOMER) {
+        query.userId = userId;
       }
       if (status) {
         query.status = status;
       }
+  
       const orders = await this.orderDB.find(query);
       return {
         success: true,
         result: orders,
-        message: 'Orders fetched successfully',
+        message: 'Orders fetched successfully'
       };
     } catch (error) {
       throw error;
     }
   }
-
   async findOne(id: string) {
     try {
       const result = await this.orderDB.findOne({ _id: id });
