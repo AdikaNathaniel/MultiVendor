@@ -1,7 +1,7 @@
 import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
+import { AppModule } from './src/app.module';
 import config from 'config';
-import { TransformationInterceptor } from './responseInterceptor';
+import { TransformationInterceptor } from './src/responseInterceptor';
 import cookieParser from 'cookie-parser';
 import { NextFunction, raw, Request, Response } from 'express';
 import csurf from 'csurf';
