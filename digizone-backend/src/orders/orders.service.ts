@@ -1,8 +1,9 @@
-import { BadRequestException, Inject, Injectable } from '@nestjs/common';
+import { BadRequestException, Inject, Injectable,UnauthorizedException } from '@nestjs/common';
 import { OrdersRepository } from 'src/shared/repositories/order.repository';
 import { ProductRepository } from 'src/shared/repositories/product.respository';
 import { UserRepository } from 'src/shared/repositories/user.repository';
 import Stripe from 'stripe';
+import { ObjectId } from 'mongodb';
 import { checkoutDtoArr } from './dto/checkout.dto';
 import config from 'config';
 import { userTypes } from 'src/shared/schema/users';
@@ -69,54 +70,106 @@ export class OrdersService {
 
   async checkout(body: checkoutDtoArr, user: Record<string, any>) {
     try {
-      const lineItems = [];
+      // Validate user object
+      if (!user || !user._id) {
+        throw new UnauthorizedException('Invalid user information');
+      }
+  
       const cartItems = body.checkoutDetails;
+  
+      // Validate cart items
+      if (!cartItems || cartItems.length === 0) {
+        throw new BadRequestException('Cart is empty');
+      }
+  
+      let lineItems = [];
+
       for (const item of cartItems) {
-        const itemsAreInStock = await this.productDB.findLicense({
-          productSku: item.skuId,
-          isSold: false,
-        });
-        if (itemsAreInStock.length <= item.quantity) {
-          lineItems.push({
-             price: item.skuPriceId,
-            quantity: item.quantity,
-            adjustable_quantity: {
-              enabled: true,
-              maximum: 5,
-              minimum: 1,
-            },
-          });
+        // Use the item's _id if it exists, otherwise default to a fallback ID
+        const productId = item._id; // Ensure this is the MongoDB-generated _id
+        const product = await this.productDB.findOne({ _id: new ObjectId(productId) });
+        
+        if (!product) {
+          // Redirect logic
+          return {
+            success: false,
+            // message: `Product with ID ${productId} not found`,
+            redirect: 'http://localhost:3000/order-success', // Example redirect URL
+          };
         }
+         
+        // Use the product's _id in the lineItems
+        lineItems.push({
+          productId: product._id,
+          quantity: item.quantity > 0 ? item.quantity : 1, // Default quantity to 1 if invalid
+        });
       }
-
+      
+      // Proceed with the checkout process using the valid lineItems
       if (lineItems.length === 0) {
-        throw new BadRequestException(
-          'These products are not available right now',
-        );
+        throw new BadRequestException('No valid items in cart to process');
       }
+      
+      console.log('Processed line items:', lineItems);
 
-      const session = await this.stripeClient.checkout.sessions.create({
-        line_items: lineItems,
-        metadata: {
-          userId: user._id.toString(),
-        },
-        mode: 'payment',
-        billing_address_collection: 'required',
-        phone_number_collection: {
-          enabled: true,
-        },
-        customer_email: user.email,
-        success_url: config.get('stripe.successUrl'),
-        cancel_url: config.get('stripe.cancelUrl'),
-      });
+// Proceed with `lineItems` for checkout logic
+if (lineItems.length === 0) {
+  throw new BadRequestException('No items in cart to process');
+}
 
+// Example: Proceed with order creation or validation
+console.log('Processed line items:', lineItems);
+
+for (const item of cartItems) {
+  // Find the product using productId
+  const product = await this.productDB.findOne({ _id: item._id });
+
+  if (!product) {
+    throw new BadRequestException(`Product with ID ${item._id} not found`);
+  }
+
+  // Get the first available SKU for the product 
+  const sku = product.skuDetails[0]; // Assuming you want to use the first SKU 
+  if (!sku) {
+    throw new BadRequestException(`Product with ID ${item._id} has no SKUs`);
+  }
+
+  lineItems.push({
+    price: sku._id, 
+    quantity: item.quantity,
+  });
+}
+  
+      // Create order object without Stripe integration
+      const orderData = {
+        orderId: Math.floor(new Date().valueOf() * Math.random()) + '',
+        userId: user._id.toString(),
+        // ... other order details (customerAddress, customerEmail, etc.)
+        orderedItems: lineItems.map((item) => ({ 
+          productId: item.price.metadata.productId, // Extract productId from price metadata
+          quantity: item.quantity,
+          price: item.price.unit_amount / 100, 
+        })),
+        orderStatus: 'pending', 
+        // ... other order fields
+      };
+  
+      // Save the order to the database
+      const order = await this.create(orderData);
+  
+      // Send order confirmation email (optional)
+      // await this.sendOrderEmail(orderData.customerEmail, orderData.orderId);
+  
       return {
-        message: 'Payment checkout session successfully created',
+        message: 'Order placed successfully',
         success: true,
-        result: session.url,
+        result: order._id,
       };
     } catch (error) {
-      throw error;
+      if (error instanceof UnauthorizedException || error instanceof BadRequestException) {
+        throw error;
+      }
+      throw new BadRequestException('Checkout failed: ' + error.message);
     }
   }
 

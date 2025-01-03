@@ -44,7 +44,7 @@ export class ProductsController {
   }
 
   @Patch(':id')
-  @Roles(userTypes.ADMIN)
+  // @Roles(userTypes.ADMIN)
   async update(
     @Param('id') id: string,
     @Body() updateProductDto: CreateProductDto,

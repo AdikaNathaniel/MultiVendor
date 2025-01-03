@@ -23,7 +23,8 @@ const CartOffCanvas: FC<IProps> = ({ show, setShow }: IProps) => {
 				if (!sessionRes.success) {
 					throw new Error(sessionRes.message);
 				}
-				router.push(sessionRes.result);
+				router.push('/order-success');
+				// router.push(sessionRes.result);
 			}
 		} catch (error) {
 			console.log(error);
@@ -41,15 +42,13 @@ const CartOffCanvas: FC<IProps> = ({ show, setShow }: IProps) => {
 					<Button
 						variant='primary'
 						style={{ width: '100%' }}
-						onClick={
-							() => handleCheckout()
-							// 	{
-							// 	setShow(false);
-							// 	router.push('/checkout');
-							// }
-						}
+						onClick={async () => {
+							// await handleCheckout();
+							setShow(false);
+							router.push('/order-success');
+						}}
 					>
-						Checkout
+						Place An Order
 					</Button>
 				</Offcanvas.Body>
 			</Offcanvas>

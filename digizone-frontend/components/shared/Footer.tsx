@@ -5,7 +5,7 @@ const Footer = () => {
 		<>
 			<hr />
 			<h5 className='footerText'>
-				Copyright © 2024 Ecommerec Hub. All rights reserved.
+				Copyright © 2025 Ecommerec Hub. All rights reserved.
 			</h5>
 		</>
 	);

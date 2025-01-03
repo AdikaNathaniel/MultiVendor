@@ -14,7 +14,8 @@ const ROOT_IGNORED_PATHS = [
   '/api/v1/products',
   '/api/v1/products/*/reviews',      // For POST reviews
   '/api/v1/products/*/reviews/*',    // For DELETE reviews
-  '/api/v1/orders/Checkout'    
+  '/api/v1/orders/Checkout',
+  '/api/v1/products/update-product*'    
 ];
 
 function isPathIgnored(path: string): boolean {

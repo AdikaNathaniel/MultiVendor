@@ -85,9 +85,9 @@ export class AuthMiddleware implements NestMiddleware {
       { path: '/api/v1/products/', method: 'DELETE' }, // delete review
 
       // Order routes
-      { path: '/api/v1/orders', method: 'GET' },
-      { path: '/api/v1/orders/', method: 'GET' },
-      { path: '/api/v1/orders/checkout', method: 'POST' },
+      // { path: '/api/v1/orders', method: 'GET' },
+      // { path: '/api/v1/orders/', method: 'GET' },
+      // { path: '/api/v1/orders/checkout', method: 'POST' },
       { path: '/api/v1/orders/webhook', method: 'POST' }
     ];
 

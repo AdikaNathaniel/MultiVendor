@@ -29,8 +29,8 @@ const OrderSuccess = () => {
 					</p>
 					<hr />
 					<p className='lead'>
-						<Link href={`/orders`} className='btn btn-primary btn-sm'>
-							View This Order
+						<Link href={`/my-account`} className='btn btn-primary btn-sm'>
+							View Your Orders Here!
 						</Link>
 					</p>
 				</div>

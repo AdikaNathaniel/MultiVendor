@@ -279,6 +279,9 @@ const UpdateProduct: NextPage<ProductProps> = ({
 								<option value='Application Software'>
 									Application Software
 								</option>
+								<option value='Application Software'>
+									  Cars
+								</option>
 							</Form.Select>
 						</Form.Group>
 						<Form.Group controlId='formBasicPassword'>
@@ -299,6 +302,9 @@ const UpdateProduct: NextPage<ProductProps> = ({
 								<option value='Android'>iOS</option>
 								<option value='Linux'>Linux</option>
 								<option value='Mac'>Mac</option>
+								<option value='BMW'>BMW</option>
+								<option value='BMW'>Ford</option>
+								<option value='BMW'>Acura</option>
 							</Form.Select>
 						</Form.Group>
 						<Form.Group controlId='formBasicPassword'>
